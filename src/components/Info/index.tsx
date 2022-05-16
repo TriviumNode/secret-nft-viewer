@@ -136,10 +136,10 @@ export default function Info({tokenId, contractAddress, ownerAddress}: props){
                     //@ts-ignore
                     pubAttributes.map((v: trait, i: number) => {
                         return (
-                            <>
+                            <div style={{paddingBottom: '10px'}}>
                                 <h6 style={{marginBottom: '0px'}}>{v.trait_type}</h6>
-                                <span style={{marginBottom: '10px'}}>{v.value}</span>
-                            </>
+                                <span>{v.value}</span>
+                            </div>
                         )
                     })
                 }
@@ -161,7 +161,7 @@ export default function Info({tokenId, contractAddress, ownerAddress}: props){
             </Row>
             <br />
             <h4>Raw Data:</h4>
-            <ReactJson src={dossier} collapsed={true} />
+            <ReactJson src={dossier} collapsed={true} name={`NFT Dossier`} displayDataTypes={false}/>
         </Container>
     )
 }
