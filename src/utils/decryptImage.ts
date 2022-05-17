@@ -1,6 +1,7 @@
 import axios from 'axios'
 import retry from 'async-await-retry'
 import crypto from 'crypto'
+import blobToBase64 from './blobToBase64';
 
 const ALGORITHM = "aes-256-gcm";
 
@@ -25,7 +26,7 @@ const decrypt = (input: ArrayBuffer, key: string) => {
     ]);
 };
 
-const decryptImage = async (url: string, key: string) => {
+const decryptImage = async (url: string, key: string, type: string, ext: string): Promise<string | null> => {
     try {
 
         const data = await retry(
@@ -41,7 +42,16 @@ const decryptImage = async (url: string, key: string) => {
         );
         
         const decrypted = decrypt(data, key);
-        return decrypted;
+        if (!!decrypted.length) {
+
+          const blob = new Blob([decrypted], {
+              type: `${type}/${ext}`,
+          });
+
+          const base64 = await blobToBase64(blob);
+          return base64 as string;
+        }
+        return null;
 
     } catch (error) {
       throw error;

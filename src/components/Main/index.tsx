@@ -17,7 +17,8 @@ function Main() {
     const paramAddress = urlParams.get('contract')
 
     const [loading, setLoading] = useState(false);
-    const [owned, setOwned] = useState([]);
+    const [loaded, setLoaded] = useState(false);
+    const [owned, setOwned] = useState<string[]>([]);
     const [contractAddress, setContractAddress] = useState(paramAddress || '')
     const [ownerAddress, setOwnerAddress] = useState('')
     const [collectionName, setCollectionName] = useState('')
@@ -29,6 +30,8 @@ function Main() {
 
         setLoading(true);
         setOwned([]);
+        setCollectionName('');
+
 
         if (!Keplr) {
             toast.error('Keplr extension not found!');
@@ -41,20 +44,17 @@ function Main() {
         const [{ address: myAddress }] = await keplrOfflineSigner.getAccounts();
     
         const { contract_info } = await queryContractInfo({contractAddress: contractAddress});
-        console.log(contract_info);
-        
+        console.log('*CONTRACT INFO*', contract_info);
+        setCollectionName(contract_info.name);
 
         const { token_list: { tokens } } = await queryOwnedTokens({contractAddress: contractAddress, ownerAddress: myAddress});
         if (!tokens.length) {
-            setLoading(false);
             toast.error(`No NFTs found for address ${myAddress}`);
-            return;
+        } else {
+            setOwned(tokens);
         }
-        //@ts-ignore
-        setOwned(tokens);
-        setCollectionName(contract_info.name);
         setLoading(false);
-
+        setLoaded(true)
     }
     
     
@@ -89,7 +89,7 @@ function Main() {
 
     <div style={{height: "15px"}} />
     
-    {owned.length ?
+    {loaded ?
         <Row className="justify-content-center">
             <Col md="8">
                 <List

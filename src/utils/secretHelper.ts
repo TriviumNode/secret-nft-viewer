@@ -28,23 +28,27 @@ type ContractInfoResponse = {
     };
 }
 
-export type DossierResponse = {
+export interface DossierResponse {
     nft_dossier: {
         public_metadata: {
-            extension: {
-                media: object[];
-                image: string;
-                attributes: object[];
-            }
+            extension: Extension | null;
+            token_uri: string | null
         };
         private_metadata: {
-            extension: {
-                media: object[];
-                image: string;
-                attributes: object[];
-            }
+            extension: Extension | null;
+            token_uri: string | null
         }
     };
+}
+
+interface Media {
+    authentication: {
+        key: string | null;
+        user: string | null;
+    }
+    file_type: string;
+    extension: string;
+    url: string;
 }
 
 type OwnedTokensResponse = {
@@ -53,6 +57,18 @@ type OwnedTokensResponse = {
     };
 }
 
+interface Trait {
+    display_type: string | null;
+    max_value: string| null;
+    trait_type: string;
+    value: string;
+}
+
+export interface Extension {
+    attributes: Trait[];
+    image: string | null;
+    media: Media[] | null;
+}
 
 
 const contractInfoQuery = {
