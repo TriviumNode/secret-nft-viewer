@@ -60,6 +60,12 @@ function Main() {
     
     return (
     <Container>
+    <Row className="justify-content-center mb-4">
+        <Col md="6">
+            <h2>Secret NFT Viewer</h2>
+            <div><b>Chain:</b>&nbsp;{process.env.REACT_APP_CHAIN_ID}</div>
+        </Col>
+    </Row>
     <Row className="justify-content-center">
         <Col md="6">
             <Form noValidate onSubmit={handleSubmit}>
